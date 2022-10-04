@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import SECAO15_173_CRIANDO_EXCECOES_PERSONALIZADAS.model.exception.DomainException;
+
 public class Reserva {
 
 	private int numeroQuarto;
@@ -15,10 +17,14 @@ public class Reserva {
 	// Reserva seja criado. Só precisa de apenas um objeto sdf
 	private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-	public Reserva(int numeroQuarto, Date checkIn, Date checkOut) {
+	public Reserva(int numeroQuarto, Date checkIn, Date checkOut) throws DomainException{
+		if (checkOut.before(checkIn)) {
+			throw new DomainException("Erro: Data de saída nao pode ser antes da Data de entrada");
+		}else {
 		this.numeroQuarto = numeroQuarto;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
+	}
 	}
 
 	public long duracao() {
@@ -29,13 +35,13 @@ public class Reserva {
 		return TimeUnit.DAYS.convert(diferenca, TimeUnit.MILLISECONDS);
 	}
 
-	public String atualizaDatas(Date checkIn, Date checkOut) {
+	public String atualizaDatas(Date checkIn, Date checkOut) throws DomainException{
 		
 		Date dataAgora = new Date();
 		if (checkIn.before(dataAgora) || checkOut.before(dataAgora)) {
-			return "As datas só podem ser a partir de amanhã: ";
+			throw new DomainException("As datas só podem ser a partir de amanhã.");
 		}  if (checkOut.before(checkIn)) {
-			return "Erro: Data de saída nao pode ser antes da Data de entrada";
+			throw new DomainException("Erro: Data de saída nao pode ser antes da Data de entrada");
 		}
 		
 		this.checkIn = checkIn;
