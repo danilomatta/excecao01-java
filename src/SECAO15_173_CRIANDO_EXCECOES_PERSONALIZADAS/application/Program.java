@@ -33,16 +33,12 @@ public class Program {
 			System.out.print("Check-out: ");
 			checkOut = sdf.parse(scan.next());
 
-			Date dataAgora = new Date();
-			if (checkIn.before(dataAgora) || checkOut.before(dataAgora)) {
-				System.out.println("As datas só podem ser a partir de amanhã: ");
-			} else if (checkOut.before(checkIn)) {
-				System.out.println("Erro: Data de saída nao pode ser antes da Data de entrada");
-			} else {
-
-				reserva.atualizaDatas(checkIn, checkOut);
+			String erro = reserva.atualizaDatas(checkIn, checkOut);
+			if (erro == null) {
 				System.out.println(reserva);
-			}
+			} else
+				System.out.println(erro);
+
 		}
 		scan.close();
 	}
